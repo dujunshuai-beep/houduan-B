@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.salesanalysis.mapper.SalesMapper">
+
+    <resultMap id="SalesResultMap" type="com.salesanalysis.model.Sales">
+        <id property="id" column="id" />
+        <result property="saleDate" column="sale_date" />
+        <result property="product" column="product" />
+        <result property="region" column="region" />
+        <result property="amount" column="amount" />
+    </resultMap>
+
+    <select id="findAll" resultMap="SalesResultMap">
+        SELECT * FROM sales
+    </select>
+
+    <select id="findById" resultMap="SalesResultMap">
+        SELECT * FROM sales WHERE id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.salesanalysis.model.Sales" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sales (sale_date, product, region, amount)
+        VALUES (#{saleDate}, #{product}, #{region}, #{amount})
+    </insert>
+
+    <update id="update" parameterType="com.salesanalysis.model.Sales">
+        UPDATE sales
+        SET sale_date = #{saleDate},
+            product = #{product},
+            region = #{region},
+            amount = #{amount}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Integer">
+        DELETE FROM sales WHERE id = #{id}
+    </delete>
+
+    <select id="aggregateSales" resultType="com.salesanalysis.model.SalesSummary">
+        SELECT
+            DATE_FORMAT(sale_date, '%Y-%m-%d') as date,
+            product,
+            region,
+            SUM(amount) as totalAmount,
+            COUNT(*) as count
+        FROM sales
+        <where>
+            <if test="date != null and date != ''">
+                AND sale_date = #{date}
+            </if>
+            <if test="product != null and product != ''">
+                AND product = #{product}
+            </if>
+            <if test="region != null and region != ''">
+                AND region = #{region}
+            </if>
+        </where>
+        GROUP BY date, product, region
+        ORDER BY date DESC, totalAmount DESC
+    </select>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO sales (sale_date, product, region, amount)
+        VALUES
+        <foreach collection="salesList" item="item" separator=",">
+            (#{item.saleDate}, #{item.product}, #{item.region}, #{item.amount})
+        </foreach>
+    </insert>
+
+</mapper>

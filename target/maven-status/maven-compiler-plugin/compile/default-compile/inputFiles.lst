@@ -1,0 +1,13 @@
+/Users/djs/Trae/houduanB/src/main/java/com/salesanalysis/mapper/SalesMapper.java
+/Users/djs/Trae/houduanB/src/main/java/com/salesanalysis/controller/SalesController.java
+/Users/djs/Trae/houduanB/src/main/java/com/salesanalysis/util/MockarooClient.java
+/Users/djs/Trae/houduanB/src/main/java/com/salesanalysis/service/impl/SalesServiceImpl.java
+/Users/djs/Trae/houduanB/src/main/java/com/salesanalysis/util/DateUtils.java
+/Users/djs/Trae/houduanB/src/main/java/com/salesanalysis/model/SalesSummary.java
+/Users/djs/Trae/houduanB/src/main/java/com/salesanalysis/model/Sales.java
+/Users/djs/Trae/houduanB/src/main/java/com/salesanalysis/util/MockarooDataLoader.java
+/Users/djs/Trae/houduanB/src/main/java/com/salesanalysis/util/MockarooDataGenerator.java
+/Users/djs/Trae/houduanB/src/main/java/com/salesanalysis/Application.java
+/Users/djs/Trae/houduanB/src/main/java/com/salesanalysis/service/SalesService.java
+/Users/djs/Trae/houduanB/src/main/java/com/salesanalysis/util/DataInsertManager.java
+/Users/djs/Trae/houduanB/src/main/java/com/salesanalysis/config/SwaggerConfig.java

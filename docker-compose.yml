@@ -1,0 +1,21 @@
+services:
+  # Spring Boot应用服务
+  spring-boot-app:
+    build: .
+    container_name: spring-boot-sales
+    restart: always
+    ports:
+      - "8080:8080"  # 映射宿主机8080端口到容器8080端口
+    environment:
+      # 数据库连接配置 - 连接到用户已有的MySQL服务
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/taskdb?useSSL=false&serverTimezone=UTC&characterEncoding=utf-8
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+      # MyBatis配置
+      MYBATIS_MAPPER-LOCATIONS: classpath:mapper/*.xml
+      MYBATIS_TYPE-ALIASES-PACKAGE: com.salesanalysis.model
+      # 日志配置
+      LOGGING_LEVEL_ROOT: INFO
+      LOGGING_LEVEL_COM_SALESANALYSIS: DEBUG
+
+# 移除不必要的网络和数据卷配置，使用默认网络
