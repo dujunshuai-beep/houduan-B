@@ -44,22 +44,28 @@ houduanB/
 │   │   │   ├── config/                        # 配置类
 │   │   │   │   └── SwaggerConfig.java         # Swagger 配置
 │   │   │   └── util/                          # 工具类
+│   │   │       ├── MockarooClient.java        # Mockaroo API 客户端
+│   │   │       ├── MockarooDataGenerator.java # Mockaroo 数据生成器
+│   │   │       ├── MockarooDataLoader.java    # Mockaroo 数据加载器
 │   │   │       └── DateUtils.java             # 日期工具类
 │   │   └── resources/
 │   │       ├── mapper/SalesMapper.xml         # MyBatis XML 映射文件
-│   │       ├── application.properties         # Spring Boot 配置
+│   │       ├── mybatis-config.xml             # MyBatis 配置文件
+│   │       ├── application.yml                # Spring Boot 配置
 │   │       └── static/                        # 静态资源
 │   └── test/                                  # 单元测试
 │       └── java/com/salesanalysis/            # 测试代码
 ├── db/                                        # 数据库脚本
 │   ├── init.sql                               # 数据库初始化脚本
 │   ├── import_data.sql                        # 测试数据导入脚本
-│   └── generate_random_data.py                # 随机数据生成脚本
+│   ├── explain_analysis.sql                   # SQL性能分析脚本
+│   └── performance_analysis_results.md        # SQL性能分析报告
 ├── scripts/                                   # 脚本工具
 │   └── test_and_performance_analysis.sh       # 测试和性能分析脚本
 ├── Dockerfile                                 # Docker 构建文件
 ├── docker-compose.yml                         # Docker Compose 配置
 ├── pom.xml                                    # Maven 项目配置
+├── run_mockaroo_data_loader.sh                # Mockaroo数据加载脚本
 └── README.md                                  # 项目文档
 ```
 
@@ -93,7 +99,8 @@ docker-compose --version
 如果这是从 GitHub 克隆的项目，使用以下命令：
 
 ```bash
-git clone [项目地址] cd houduanB
+git clone [项目地址]
+cd houduanB
 ```
 
 如果是直接下载的项目文件，直接进入项目目录即可。
@@ -127,7 +134,16 @@ docker exec -i $(docker ps -q -f name=mysql) mysql -u root -prootpassword < init
 docker exec -i $(docker ps -q -f name=mysql) mysql -u root -prootpassword < import_data.sql
 ```
 
-### 4. 验证服务启动
+### 4. 生成并导入测试数据
+
+系统支持使用 Mockaroo API 生成测试数据：
+
+```bash
+# 运行 Mockaroo 数据加载脚本
+./run_mockaroo_data_loader.sh
+```
+
+### 5. 验证服务启动
 
 服务启动后，可以通过以下方式验证：
 
@@ -309,7 +325,7 @@ mvn test
 
 1. 确保已安装 Java 1.8 和 Maven
 2. 启动本地 MySQL 数据库
-3. 修改 `application.properties` 中的数据库连接信息
+3. 修改 `application.yml` 中的数据库连接信息
 4. 运行以下命令：
 
 ```bash
@@ -318,17 +334,11 @@ mvn spring-boot:run
 
 ### 生成大量测试数据
 
-可以使用提供的 Python 脚本生成随机测试数据：
+可以使用 Mockaroo API 生成测试数据：
 
 ```bash
-# 安装依赖
-pip install random datetime csv
-
-# 运行数据生成脚本
-python db/generate_random_data.py
-
-# 导入生成的 CSV 数据到数据库
-mysql -u root -p salesdb < import_csv.sql
+# 运行 Mockaroo 数据加载脚本
+./run_mockaroo_data_loader.sh
 ```
 
 ## 📈 性能优化
@@ -346,6 +356,13 @@ mysql -u root -p salesdb < import_csv.sql
 1. 避免全表扫描，尽量使用索引字段进行筛选
 2. 合理设置查询条件，避免不必要的数据加载
 3. 对于聚合查询，确保正确使用 GROUP BY 和索引
+
+### SQL性能分析
+
+项目包含详细的SQL性能分析报告：
+
+- [SQL性能分析脚本](db/explain_analysis.sql)
+- [SQL性能分析报告](db/performance_analysis_results.md)
 
 ## 🚢 部署说明
 
